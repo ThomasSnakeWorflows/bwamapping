@@ -10,7 +10,8 @@ configfile: "config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
 
-samples = pd.read_table(config["samples"]).set_index("sample", drop=False)
+samples = pd.read_table(config["samples"],
+                        dtype={"sample": str}).set_index("sample", drop=False)
 validate(samples, schema="../schemas/samples.schema.yaml")
 
 

@@ -3,7 +3,7 @@ description: row of the samples.tsv, representing a sequencing unit, i.e. single
 type: object
 properties:
   sample:
-    type: string
+    type: ["integer","string"]
     description: sample name/id the unit has been sequenced from
   reads:
     type: string
