@@ -1,0 +1,9 @@
+samples: samples.tsv
+
+ref:
+  name: CHIR_1.0
+  # Path to the reference genome
+  genome: testdata/genome.fa.gz
+
+#params:
+#  bwamem:

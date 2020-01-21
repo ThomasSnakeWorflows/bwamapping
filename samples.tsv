@@ -1,0 +1,2 @@
+sample	reads
+goatA	testdata/test_R1.fastq.gz,testdata/test_R2.fastq.gz
