@@ -12,4 +12,5 @@ include: "rules/mapping.smk"
 # Target rules
 rule all:
     input:
-        expand("mapping/{sample}.bam", sample=samples.index)
+        expand("mapping/{sample}.bam.bai", sample=samples.index),
+        expand("mapping/{sample}_fastp.html", sample=samples.index)
