@@ -43,6 +43,7 @@ def get_fastq(wildcards):
     fastqs = samples.loc[wildcards.sample, "reads"].split(",")
     return fastqs
 
+
 def get_fastq4fastp(wildcards):
     """Get fastq files of given sample-unit."""
     fastqs = samples.loc[wildcards.sample, "reads"].split(",")
@@ -70,6 +71,15 @@ def get_threads(rule, default):
         return cluster_config[rule]["threads"]
     if "default" in cluster_config and "threads" in cluster_config["default"]:
         return cluster_config["default"]["threads"]
+    return default
+
+
+def get_mem(rule, default):
+    cluster_config = snakemake.workflow.cluster_config
+    if rule in cluster_config and "mem" in cluster_config[rule]:
+        return cluster_config[rule]["mem"]
+    if "default" in cluster_config and "mem" in cluster_config["default"]:
+        return cluster_config["default"]["mem"]
     return default
 
 

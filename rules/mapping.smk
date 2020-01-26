@@ -6,8 +6,8 @@ rule fastp:
     input:
         get_fastq
     output:
-        html="stats/{sample}_fastp.html",
-        json="stats/{sample}_fastp.json"
+        html="stats/fastq/{sample}_fastp.html",
+        json="stats/fastq/{sample}_fastp.json"
     params:
         fastqs=get_fastq4fastp
     log:
@@ -25,12 +25,12 @@ rule bwamap:
     params:
         reference = get_genome,
         rg = get_read_group,
-        bwamem_params = get_bwamem_params(config, "-M -T 19")
+        bwamem_params = get_bwamem_params(config, "-M -T 30")
     threads:
-        8
+        get_threads("bwamap", 8)
     log:
-        stdout = "logs/map_{sample}.o",
-        stderr = "logs/map_{sample}.e"
+        stdout = "logs/fastp_{sample}.o",
+        stderr = "logs/fastp_{sample}.e"
     shell:
         "rm -f {output.bam}*; "
         "bwa mem -t {threads} {params.bwamem_params} -R {params.rg} "
@@ -52,3 +52,22 @@ rule bamindex:
     shell:
         "samtools index {input}; "
         "samtools flagstat {input} > {output.summary}"
+
+rule qualimap:
+    input:
+        bam = "mapping/{sample}.bam",
+        bai = "mapping/{sample}.bam.bai"
+    output:
+        report = "mapping/stats/{sample}/qualimapReport.html"
+    threads:
+        get_threads("qualimap", 8)
+    params:
+        mem = get_mem("qualimap", 4),
+        outdir = "mapping/stats/{sample}"
+    log:
+        stdout = "logs/qualimap_{sample}.o",
+        stderr = "logs/qualimap_{sample}.e"
+    shell:
+        "qualimap bamqc -bam {input.bam} -nt {threads} "
+        " --java-mem-size={params.mem}G -c "
+        " -outdir {params.outdir}"
