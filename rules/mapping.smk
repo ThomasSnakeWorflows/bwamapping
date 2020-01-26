@@ -14,7 +14,7 @@ rule fastp:
         stdout = "logs/map_{sample}.o",
         stderr = "logs/map_{sample}.e"
     shell:
-        "./fastp -A -L -Q -h {output.html} -j {output.json} {params.fastqs} "
+        "fastp -A -L -Q -h {output.html} -j {output.json} {params.fastqs} "
         " 1>{log.stdout} 2>{log.stderr}"
 
 rule bwamap:
