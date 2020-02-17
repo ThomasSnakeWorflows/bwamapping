@@ -1,9 +1,11 @@
 # bwamapping
 A snakemake workflows for aligning reads
 
+Inn order to be able to use I use snakemake 5.8.2 i use a conda env (see environment.yaml ) 
+
 
 Setting the correct environment :
- (I use a conda env with snakemake-minimal=5.8.2)
+ ()
 ```bash
 conda activate snakemake
 module load bioinfo/fastp-0.19.4
