@@ -2,7 +2,8 @@
 A snakemake workflows for aligning reads
 
 
-Setting the correct environment
+Setting the correct environment :
+ (I use a conda env with snakemake-minimal=5.8.2)
 ```bash
 conda activate snakemake
 module load bioinfo/fastp-0.19.4
