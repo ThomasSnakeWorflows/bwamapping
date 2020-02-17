@@ -11,7 +11,7 @@ module load bioinfo/samtools-1.9
 module load bioinfo/qualimap-11-12-16
 ```
 
-- The genome file must be bwa indexed
+- **Warning** : The genome file must be bwa indexed
 
 - Make appropriate changes to the config.yaml
 
