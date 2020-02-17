@@ -1,0 +1,6 @@
+name: snaketest
+channels:
+  - bioconda
+dependencies:
+  - snakemake-minimal=5.8.2
+
