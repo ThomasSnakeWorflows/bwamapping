@@ -1,20 +1,19 @@
 
 
 
-
 rule fastp:
     input:
         get_fastq
     output:
-        html="stats/fastq/{sample}_fastp.html",
-        json="stats/fastq/{sample}_fastp.json"
+        html = "mapping/fastqstats/{sample}_fastp.html",
+        json = "mapping/fastqstats/{sample}_fastp.json"
     params:
         fastqs=get_fastq4fastp
     log:
         stdout = "logs/map_{sample}.o",
         stderr = "logs/map_{sample}.e"
     shell:
-        "./fastp -A -L -Q -h {output.html} -j {output.json} {params.fastqs} "
+        "fastp -A -L -Q -h {output.html} -j {output.json} {params.fastqs} "
         " 1>{log.stdout} 2>{log.stderr}"
 
 rule bwamap:
@@ -58,7 +57,7 @@ rule qualimap:
         bam = "mapping/{sample}.bam",
         bai = "mapping/{sample}.bam.bai"
     output:
-        report = "mapping/stats/{sample}/qualimapReport.html"
+        report = "mapping/bamstats/{sample}/qualimapReport.html"
     threads:
         get_threads("qualimap", 8)
     params:
