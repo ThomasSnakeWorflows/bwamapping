@@ -1,0 +1,5 @@
+snakemake==5.8.2
+pandas==0.25.3
+termcolor==1.1.0
+drmaa==0.7.9
+
