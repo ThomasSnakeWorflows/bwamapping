@@ -22,7 +22,7 @@ snakemake --jobs 30 --cluster-config cluster.yaml --drmaa " --mem-per-cpu={clust
 ```
 In order to use snakemake 5.8.2 I use a conda env (see environment.yaml) easily created by
 ```bash 
-conda env create -f environment.yaml 
+conda env create --prefix ./env  -f environment.yaml 
 ```
 
 
