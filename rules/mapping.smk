@@ -5,8 +5,8 @@ rule fastp:
     input:
         get_fastq
     output:
-        html = "mapping/fastqstats/{sample}_fastp.html",
-        json = "mapping/fastqstats/{sample}_fastp.json"
+        html = "mapping/{sample}/fastp.html",
+        json = "mapping/{sample}/fastp.json"
     params:
         fastqs=get_fastq4fastp
     log:
@@ -20,7 +20,7 @@ rule bwamap:
     input:
         get_fastq
     output:
-        bam = "mapping/{sample}.bam"
+        bam = "mapping/{sample}/{sample}.bam"
     params:
         reference = get_genome,
         rg = get_read_group,
@@ -39,10 +39,10 @@ rule bwamap:
 
 rule bamindex:
     input:
-        "mapping/{sample}.bam"
+        "mapping/{sample}/{sample}.bam"
     output:
-        bai = "mapping/{sample}.bam.bai",
-        summary = "mapping/{sample}.bam.flagstat"
+        bai = "mapping/{sample}/{sample}.bam.bai",
+        summary = "mapping/{sample}/{sample}.bam.flagstat"
     threads:
         1
     log:
@@ -54,15 +54,15 @@ rule bamindex:
 
 rule qualimap:
     input:
-        bam = "mapping/{sample}.bam",
-        bai = "mapping/{sample}.bam.bai"
+        bam = "mapping/{sample}/{sample}.bam",
+        bai = "mapping/{sample}/{sample}.bam.bai"
     output:
-        report = "mapping/bamstats/{sample}/qualimapReport.html"
+        report = "mapping/{sample}/qualimap/qualimapReport.html"
     threads:
         get_threads("qualimap", 8)
     params:
         mem = get_mem("qualimap", 4),
-        outdir = "mapping/stats/{sample}"
+        outdir = "mapping/{sample}/qualimap"
     log:
         stdout = "logs/qualimap_{sample}.o",
         stderr = "logs/qualimap_{sample}.e"
