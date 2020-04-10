@@ -32,11 +32,6 @@ def get_genome(wildcards):
     """ the genome file """
     return config["ref"]["genome"]
 
-#
-# def get_fai(wildcards):
-#     """ the genome faid index"""
-#     return config["ref"]["genome"] + ".fai"
-
 
 def get_fastq(wildcards):
     """Get fastq files of given sample-unit."""

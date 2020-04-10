@@ -15,3 +15,9 @@ rule all:
         expand("mapping/{sample}/{sample}.bam.bai", sample=samples.index),
         expand("mapping/{sample}/fastp.html", sample=samples.index),
         expand("mapping/{sample}/qualimap/qualimapReport.html", sample=samples.index)
+
+rule fastpall:
+	input:
+		expand("mapping/{sample}/fastp.html", sample=samples.index)
+	output:
+		touch("fastp.done")
