@@ -21,7 +21,7 @@ pip install -r requirements.txt
 
 Executing the pipeline
 ```bash
-snakemake --jobs 30 --cluster-config cluster.yaml --drmaa " --mem-per-cpu={cluster.mem}000 --mincpus={threads} --time={cluster.time} -J {cluster.name} -N 1=1" -p -n
+snakemake --jobs 30 --cluster-config cluster.yaml --drmaa " --mem-per-cpu={cluster.mem-per-cpu}000 --mincpus={threads} --time={cluster.time} -J {cluster.name} -N 1=1" -p -n
 ```
 
 In order to use snakemake 5.8.2 I use a conda env (see environment.yaml) easily created by
