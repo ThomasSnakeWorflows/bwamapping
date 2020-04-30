@@ -8,7 +8,7 @@ rule fastp:
         html = "mapping/{sample}/fastp.html",
         json = "mapping/{sample}/fastp.json"
     params:
-        fastqs=get_fastq4fastp
+        fastqs = get_fastq4fastp
     log:
         stdout = "logs/map_{sample}.o",
         stderr = "logs/map_{sample}.e"
@@ -24,18 +24,23 @@ rule bwamap:
     params:
         reference = get_genome,
         rg = get_read_group,
-        bwamem_params = get_bwamem_params(config, "-M -T 30")
+        bwamem_params = get_bwamem_params(config, "-M -T 30"),
+        fastqs = get_fastq4bwamem
     threads:
         get_threads("bwamap", 8)
     log:
         stdout = "logs/fastp_{sample}.o",
         stderr = "logs/fastp_{sample}.e"
     shell:
-        "rm -f {output.bam}*; "
-        "bwa mem -t {threads} {params.bwamem_params} -R {params.rg} "
-        "{params.reference} {input} 2> {log.stderr} | "
-        "samtools view -bS - 2> {log.stderr} | "
-        "samtools sort -o {output.bam} 1> {log.stdout} 2> {log.stderr}"
+        """
+        rm -f {output.bam}*
+        bwa mem -t {threads} {params.bwamem_params} -R {params.rg} \
+           {params.reference} {params.fastqs} 2> {log.stderr} | \
+           samtools view -bS - 2> {log.stderr} | \
+           samtools sort -o {output.bam} 1> {log.stdout} 2> {log.stderr}
+        """
+#fg_sar start bwamem
+#fg_sar stop bwamem
 
 rule bamindex:
     input:

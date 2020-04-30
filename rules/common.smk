@@ -2,6 +2,7 @@
 import os
 import sys
 from termcolor import cprint
+from collections import defaultdict
 
 # report: "../report/workflow.rst"
 
@@ -42,10 +43,19 @@ def get_fastq(wildcards):
 def get_fastq4fastp(wildcards):
     """Get fastq files of given sample-unit."""
     fastqs = samples.loc[wildcards.sample, "reads"].split(",")
-    if len(fastqs)>1:
+    if len(fastqs) > 1:
         return "-i %s -I %s " % (fastqs[0], fastqs[1])
     else:
         return "-i %s " % fastqs[0]
+
+
+def get_fastq4bwamem(wildcards):
+    """Get fastq files of given sample-unit."""
+    fastqs = samples.loc[wildcards.sample, "reads"].split(",")
+    if len(fastqs ) > 1:
+        return "%s %s " % (fastqs[0], fastqs[1])
+    else:
+        return "-p %s " % fastqs[0]
 
 
 def get_read_group(wildcards):

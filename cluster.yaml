@@ -1,15 +1,15 @@
 __default__:
-  mem: 8
+  mem-per-cpu: 16
   name: "{rule}.{wildcards}"
-  time: "24:00:00"
+  time: "96:00:00"
   output: "logs/cluster/{rule}.{wildcards}.out"
   error: "logs/cluster/{rule}.{wildcards}.err"
 
 
 bwamap:
-  mem: 16
-  threads: 8
+  mem-per-cpu: 8
+  threads: 30
 
 qualimap:
-  mem: 24
-  threads: 8
+  mem-per-cpu: 8
+  threads: 10
