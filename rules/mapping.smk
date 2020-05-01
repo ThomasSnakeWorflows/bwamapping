@@ -1,36 +1,66 @@
 
+import re
+
+rule essai:
+    input:
+        "Snakefile"
+    output:
+        touch("done.txt")
+    threads:
+        10
+    params:
+        threads=10
+    run:
+        print("threads %d" % params.threads)
 
 
-rule fastp:
+checkpoint splitfastq:
     input:
         get_fastq
     output:
-        html = "mapping/{sample}/fastp.html",
-        json = "mapping/{sample}/fastp.json"
+        directory("mapping/{sample}/fastq")
+    threads:
+        get_threads("bwamap", 12)
     params:
-        fastqs = get_fastq4fastp
-    log:
-        stdout = "logs/map_{sample}.o",
-        stderr = "logs/map_{sample}.e"
-    shell:
-        "fastp -A -L -Q -h {output.html} -j {output.json} {params.fastqs} "
-        " 1>{log.stdout} 2>{log.stderr}"
+        threads=get_threads("bwamap", 12)
+    run:
+        sample = wildcards.sample
+        num_batches = get_batch_num(input[0])
+        os.mkdir("mapping/%s/fastq" % sample)
+        print("num batches %d" % num_batches)
+        if is_interleaved(sample):
+            command = "fastqsplitter -t %d -i %s " % (params.threads, input[0])
+            for batch in range(num_batches):
+                command += "-o mapping/%s/fastq/batch%s.fastq.gz " % (sample, batch)
+            print(command)
+            os.system(command)
+        else:
+            commandR1 = "fastqsplitter -t %d -i %s " % (params.threads, input[0])
+            print("It is not interleaved")
+            for batch in range(num_batches):
+                commandR1 += "-o mapping/%s/fastq/batch%s_R1.fastq.gz " % (sample, batch)
+            os.system(commandR1)
+            commandR2 = "fastqsplitter -t %d -i %s " % (params.threads, input[0])
+            for batch in range(num_batches):
+                commandR2 += "-o mapping/%s/fastq/batch%s_R1.fastq.gz " % (sample, batch)
+            os.system(commandR2)
+
 
 rule bwamap:
     input:
-        get_fastq
+        get_fastq_batch
     output:
-        bam = "mapping/{sample}/{sample}.bam"
+        bam = temp("mapping/{sample}/{batch}.bam")
     params:
         reference = get_genome,
         rg = get_read_group,
         bwamem_params = get_bwamem_params(config, "-M -T 30"),
-        fastqs = get_fastq4bwamem
+        fastqs = get_fastqbatch4bwamem
     threads:
         get_threads("bwamap", 8)
     log:
-        stdout = "logs/fastp_{sample}.o",
-        stderr = "logs/fastp_{sample}.e"
+        stdout = "logs/bwa_{sample}_{batch}.o",
+        stderr = "logs/bwa_{sample}_{batch}.e"
     shell:
         """
         rm -f {output.bam}*
@@ -39,8 +69,28 @@ rule bwamap:
            samtools view -bS - 2> {log.stderr} | \
            samtools sort -o {output.bam} 1> {log.stdout} 2> {log.stderr}
         """
-#fg_sar start bwamem
-#fg_sar stop bwamem
+
+
+def aggregate_input(wildcards):
+    checkpoint_output = checkpoints.splitfastq.get(**wildcards).output[0]
+    raw_batches = glob_wildcards(os.path.join(checkpoint_output,
+                                      "{b}.fastq.gz")).b
+    batches = list(set([re.sub("\_R1|\_R2","",batch) for batch in raw_batches]))
+    return expand("mapping/{sample}/{batch}.bam",
+                  sample=wildcards.sample,
+                  batch=batches)
+
+rule aggregate:
+    input:
+        aggregate_input
+    output:
+        "mapping/{sample}/{sample}.bam"
+    shell:
+        """
+        rm -fr mapping/{wildcards.sample}/fastq
+        samtools merge -O BAM {output} {input}
+        """
+
 
 rule bamindex:
     input:
@@ -56,22 +106,3 @@ rule bamindex:
     shell:
         "samtools index {input}; "
         "samtools flagstat {input} > {output.summary}"
-
-rule qualimap:
-    input:
-        bam = "mapping/{sample}/{sample}.bam",
-        bai = "mapping/{sample}/{sample}.bam.bai"
-    output:
-        report = "mapping/{sample}/qualimap/qualimapReport.html"
-    threads:
-        get_threads("qualimap", 8)
-    params:
-        mem = get_mem("qualimap", 4),
-        outdir = "mapping/{sample}/qualimap"
-    log:
-        stdout = "logs/qualimap_{sample}.o",
-        stderr = "logs/qualimap_{sample}.e"
-    shell:
-        "qualimap bamqc -bam {input.bam} -nt {threads} "
-        " --java-mem-size={params.mem}G -c "
-        " -outdir {params.outdir}"

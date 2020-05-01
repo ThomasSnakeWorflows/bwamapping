@@ -1,5 +1,5 @@
 __default__:
-  mem-per-cpu: 16
+  mem-per-cpu: 8
   name: "{rule}.{wildcards}"
   time: "96:00:00"
   output: "logs/cluster/{rule}.{wildcards}.out"
@@ -8,8 +8,12 @@ __default__:
 
 bwamap:
   mem-per-cpu: 8
-  threads: 30
+  threads: 12
 
 qualimap:
   mem-per-cpu: 8
-  threads: 10
+  threads: 6
+
+splitfastq:
+  mem-per-cpu: 4
+  threads: 12

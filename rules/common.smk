@@ -3,6 +3,7 @@ import os
 import sys
 from termcolor import cprint
 from collections import defaultdict
+import math
 
 # report: "../report/workflow.rst"
 
@@ -18,7 +19,13 @@ validate(samples, schema="../schemas/samples.schema.yaml")
 
 # Wildcard constraints
 wildcard_constraints:
-    sample="|".join(samples.index)
+    sample="|".join(samples.index),
+    batch="batch\d+"
+
+
+def is_interleaved(sample):
+    fastqs = samples.loc[sample, "reads"].split(",")
+    return False if len(fastqs) > 1 else True
 
 
 # Helper functions #####
@@ -49,13 +56,37 @@ def get_fastq4fastp(wildcards):
         return "-i %s " % fastqs[0]
 
 
-def get_fastq4bwamem(wildcards):
-    """Get fastq files of given sample-unit."""
-    fastqs = samples.loc[wildcards.sample, "reads"].split(",")
-    if len(fastqs ) > 1:
-        return "%s %s " % (fastqs[0], fastqs[1])
+# def get_fastq4bwamem(wildcards):
+#     """Get fastq files of given sample-unit."""
+#     fastqs = samples.loc[wildcards.sample, "reads"].split(",")
+#     if len(fastqs ) > 1:
+#         return "%s %s " % (fastqs[0], fastqs[1])
+#     else:
+#         return "-p %s " % fastqs[0]
+
+
+def get_batch_num(fastq):
+    size = Path(fastq).stat().st_size
+    return math.ceil(size/float(config['targetsize']))
+
+
+def get_fastq_batch(wildcards):
+    sample = wildcards.sample
+    batch = wildcards.batch
+    if is_interleaved(sample):
+        return ["mapping/%s/fastq/%s.fastq.gz" % (sample, batch)]
     else:
+        return ["mapping/%s/fastq/%s_R1.fastq.gz" % (sample, batch),
+                "mapping/%s/fastq/%s_R2.fastq.gz" % (sample, batch)]
+
+
+def get_fastqbatch4bwamem(wildcards):
+    """Get fastq files of given sample-unit."""
+    fastqs = get_fastq_batch(wildcards)
+    if len(fastqs) == 1:
         return "-p %s " % fastqs[0]
+    else:
+        return " ".join(fastqs)
 
 
 def get_read_group(wildcards):

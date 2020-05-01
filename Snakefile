@@ -6,8 +6,10 @@ include: "rules/common.smk"
 
 if not bwa_index_exists(config["ref"]["genome"]):
     print_error_exit("%s is not bwa-indexed" % config["ref"]["genome"])
+
 # Modules
 include: "rules/mapping.smk"
+include: "rules/stats.smk"
 
 # Target rules
 rule all:
