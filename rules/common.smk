@@ -69,7 +69,7 @@ def get_batch_num(fastq, targetsize=8000000000):
     size = Path(fastq).stat().st_size
     if 'targetsize' in config:
         targetsize = float(config['targetsize'])
-    return math.ceil(size/targetsize))
+    return math.ceil(size/targetsize)
 
 
 def get_fastq_batch(wildcards):
