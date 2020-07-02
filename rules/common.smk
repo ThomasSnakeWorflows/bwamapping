@@ -65,9 +65,11 @@ def get_fastq4fastp(wildcards):
 #         return "-p %s " % fastqs[0]
 
 
-def get_batch_num(fastq):
+def get_batch_num(fastq, targetsize=8000000000):
     size = Path(fastq).stat().st_size
-    return math.ceil(size/float(config['targetsize']))
+    if 'targetsize' in config:
+        targetsize = float(config['targetsize'])
+    return math.ceil(size/targetsize))
 
 
 def get_fastq_batch(wildcards):
