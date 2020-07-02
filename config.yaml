@@ -5,5 +5,8 @@ ref:
   # Path to the reference genome
   genome: testdata/genome.fa.gz
 
+# The batch fastq.gz target size
+targetsize: 8000000000
+
 #params:
 #  bwamem:
