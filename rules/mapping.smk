@@ -1,19 +1,6 @@
 
 import re
 
-rule essai:
-    input:
-        "Snakefile"
-    output:
-        touch("done.txt")
-    threads:
-        10
-    params:
-        threads=10
-    run:
-        print("threads %d" % params.threads)
-
-
 checkpoint splitfastq:
     input:
         get_fastq
