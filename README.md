@@ -24,11 +24,6 @@ Executing the pipeline
 snakemake --jobs 99 --cluster-config cluster.yaml --drmaa " --mem-per-cpu={cluster.mem-per-cpu}000 --mincpus={threads} --time={cluster.time} -J {cluster.name} -N 1=1" -p -n
 ```
 
-In order to use snakemake 5.8.2 I use a conda env (see environment.yaml) easily created by
-```bash
-conda env create --prefix ./env  -f environment.yaml
-```
-
 - **Generating the test data set from genome.fa.gz**
 
 ```python
