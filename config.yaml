@@ -3,11 +3,14 @@ samples: samples.tsv
 ref:
   name: CHIR_1.0
   # Path to the reference genome
-  genome: testdata/genome.fa.gz
+  #genome: /work2/genphyse/dynagen/tfaraut/snakeWorkFlows/bwamapping/testdata/genome.fa.gz
+  genome: /home/tfaraut/mnt/genologin/dynawork/snakeWorkFlows/bwamapping/testdata/genome.fa.gz
 
 # Large fastq.gz files are split in targetsize bytes batch files
 # and processed in parallel, default is 8Gb for each batch
 targetsize: 8000000000
+
+workdir: mapping
 
 #params:
 #  bwamem:

@@ -19,17 +19,19 @@ checkpoint splitfastq:
             command = "fastqsplitter -t %d -i %s " % (params.threads, input[0])
             for batch in range(num_batches):
                 command += "-o mapping/%s/fastq/batch%s.fastq.gz " % (sample, batch)
-            print(command)
+            eprint(command)
             os.system(command)
         else:
             commandR1 = "fastqsplitter -t %d -i %s " % (params.threads, input[0])
             print("It is not interleaved")
             for batch in range(num_batches):
                 commandR1 += "-o mapping/%s/fastq/batch%s_R1.fastq.gz " % (sample, batch)
+            eprint(commandR1)
             os.system(commandR1)
-            commandR2 = "fastqsplitter -t %d -i %s " % (params.threads, input[0])
+            commandR2 = "fastqsplitter -t %d -i %s " % (params.threads, input[1])
             for batch in range(num_batches):
-                commandR2 += "-o mapping/%s/fastq/batch%s_R1.fastq.gz " % (sample, batch)
+                commandR2 += "-o mapping/%s/fastq/batch%s_R2.fastq.gz " % (sample, batch)
+            eprint(commandR2)
             os.system(commandR2)
 
 

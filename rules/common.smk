@@ -23,6 +23,10 @@ wildcard_constraints:
     batch="batch\d+"
 
 
+def eprint(*args, **kwargs):
+    print(*args,  file=sys.stderr, **kwargs)
+
+
 def is_interleaved(sample):
     fastqs = samples.loc[sample, "reads"].split(",")
     return False if len(fastqs) > 1 else True

@@ -34,3 +34,20 @@ rule qualimap:
         "qualimap bamqc -bam {input.bam} -nt {threads} "
         " --java-mem-size={params.mem}G -c "
         " -outdir {params.outdir}"
+
+rule samtoolsstats:
+    input:
+        bam = "mapping/{sample}/{sample}.bam",
+        bai = "mapping/{sample}/{sample}.bam.bai"
+    output:
+        report = "stats/{sample}_samtools.stats"
+    shell:
+        "samtools stats {input.bam} > {output}"
+
+rule multiqc:
+    input:
+        expand("stats/{sample}_samtools.stats", sample=samples.index)
+    output:
+        "stats/multiqc/multiqc_report.html"
+    shell:
+        "multiqc stats -o stats/multiqc "
