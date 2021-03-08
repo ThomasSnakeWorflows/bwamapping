@@ -1,20 +1,6 @@
 # bwamapping
 A snakemake workflows for aligning reads
 
-Setting the correct environment :
-```bash
-module load bioinfo/fastp-0.19.4
-module load bioinfo/bwa-0.7.17
-module load bioinfo/samtools-1.9
-module load bioinfo/qualimap-11-12-16
-module load system/Python-3.6.3
-#module load bioinfo/snakemake-5.8.1
-#module load bioinfo/MultiQC-v1.7
-python3 -m venv bwaenv
-source bwaenv/bin/activate
-pip install -r requirements.txt
-```
-
 Setting the correct conda environment :
 ```bash
 module load bioinfo/fastp-0.19.4
@@ -43,7 +29,7 @@ In order to use snakemake 5.8.2 I use a conda env (see environment.yaml) easily 
 conda env create --prefix ./env  -f environment.yaml
 ```
 
-- **Generating the test data set**
+- **Generating the test data set from genome.fa.gz**
 
 ```python
 import random
@@ -63,9 +49,4 @@ wgsim -1 100 -2 100 -N 500 random.fa tmp_randreads_R1.fastq tmp_randreads_R2.fas
 cat tmp_reads_R1.fastq tmp_randreads_R1.fastq | gzip -c > readsB_R1.fastq.gz
 cat tmp_reads_R2.fastq tmp_randreads_R2.fastq | gzip -c > readsB_R2.fastq.gz
 rm -f tmp_*.fastq
-```
-
-
-gzip reads_R1.fastq
-gzip reads_R2.fastq
 ```
