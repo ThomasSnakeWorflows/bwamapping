@@ -26,7 +26,7 @@ snakemake --jobs 99 --cluster-config cluster.yaml --drmaa " --mem-per-cpu={clust
 
 - **MutiQC example**
 
-https://htmlpreview.github.io/?https://github.com/ThomasSnakeWorflows/bwamapping/blob/master/multiqc_report.html
+[MultiQC for the testdata](https://htmlpreview.github.io/?https://github.com/ThomasSnakeWorflows/bwamapping/blob/master/multiqc_report.html)
 
 - **Generating the test data set from genome.fa.gz**
 
