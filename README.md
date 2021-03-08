@@ -24,6 +24,12 @@ Executing the pipeline
 snakemake --jobs 99 --cluster-config cluster.yaml --drmaa " --mem-per-cpu={cluster.mem-per-cpu}000 --mincpus={threads} --time={cluster.time} -J {cluster.name} -N 1=1" -p -n
 ```
 
+- **MutiQC example**
+
+Copy/paste multiqc_report.html path to https://htmlpreview.github.io/?
+
+
+
 - **Generating the test data set from genome.fa.gz**
 
 ```python
