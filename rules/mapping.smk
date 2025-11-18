@@ -7,9 +7,9 @@ checkpoint splitfastq:
     output:
         directory("mapping/{sample}/fastq")
     threads:
-        get_threads("bwamap", 12)
+        12
     params:
-        threads=get_threads("bwamap", 12)
+        threads=12
     run:
         sample = wildcards.sample
         num_batches = get_batch_num(input[0])
@@ -46,7 +46,7 @@ rule bwamap:
         bwamem_params = get_bwamem_params(config, "-M -T 30"),
         fastqs = get_fastqbatch4bwamem
     threads:
-        get_threads("bwamap", 8)
+        8
     log:
         stdout = "logs/bwa_{sample}_{batch}.o",
         stderr = "logs/bwa_{sample}_{batch}.e"

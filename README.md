@@ -3,17 +3,27 @@ A snakemake workflows for aligning reads
 
 Setting the correct conda environment :
 ```bash
-module load bioinfo/fastp-0.19.4
-module load bioinfo/bwa-0.7.17
-module load bioinfo/samtools-1.9
-module load bioinfo/qualimap-11-12-16
-module load system/Python-3.6.3
-conda create -p ./bwaenv python=3.6.3
-conda install fastqplitter
-pip install -r requirements.txt
+mamba create -n bwammaping -c bioconda snakemake=9.10.1
+mamba activate bwammaping
+mamba install bioconda::fastp
+mamba install bioconda::bwa
+mamba install bioconda::qualimap
+mamba install bioconda::fastqsplitter
+mamba install bioconda::samtools
+pip install snakemake-executor-plugin-slurm
+pip install termcolor==1.1.0
+pip install multiQC==1.9
+```
+# Make sure to activate your conda environment
+```
+mamba activate bwammaping
 ```
 
-- **Warning** : The genome file must be bwa indexed
+- **Warning** : The genome file must be bwa indexed, if not run
+
+```
+bwa index REF.fa
+```
 
 - Make appropriate changes to the config.yaml
 
@@ -21,7 +31,7 @@ pip install -r requirements.txt
 
 Executing the pipeline
 ```bash
-snakemake --jobs 99 --cluster-config cluster.yaml --drmaa " --mem-per-cpu={cluster.mem-per-cpu}000 --mincpus={threads} --time={cluster.time} -J {cluster.name} -N 1=1" -p -n
+snakemake --configfile config.yaml --profile genotoul -j 40 -p -n
 ```
 
 - **MutiQC example**

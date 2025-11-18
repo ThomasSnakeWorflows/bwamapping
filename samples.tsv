@@ -1,2 +1,2 @@
 sample	reads
-goatA	testdata/test_R1.fastq.gz,testdata/test_R2.fastq.gz
+goatA	/work/genphyse/genome3D/Thomas/dynawork/Retrocopies/work/sideretro/ovis_aries/2026/bwamapping/testdata/reads_R1.fastq.gz,/work/genphyse/genome3D/Thomas/dynawork/Retrocopies/work/sideretro/ovis_aries/2026/bwamapping/testdata/reads_R2.fastq.gz

@@ -7,22 +7,6 @@ import math
 
 # report: "../report/workflow.rst"
 
-# Config file and sample sheets
-configfile: "config.yaml"
-validate(config, schema="../schemas/config.schema.yaml")
-
-
-samples = pd.read_table(config["samples"],
-                        dtype={"sample": str}).set_index("sample", drop=False)
-validate(samples, schema="../schemas/samples.schema.yaml")
-
-
-# Wildcard constraints
-wildcard_constraints:
-    sample="|".join(samples.index),
-    batch="batch\d+"
-
-
 def eprint(*args, **kwargs):
     print(*args,  file=sys.stderr, **kwargs)
 
@@ -107,22 +91,22 @@ def get_bwamem_params(config, default):
     return default
 
 
-def get_threads(rule, default):
-    cluster_config = snakemake.workflow.cluster_config
-    if rule in cluster_config and "threads" in cluster_config[rule]:
-        return cluster_config[rule]["threads"]
-    if "default" in cluster_config and "threads" in cluster_config["default"]:
-        return cluster_config["default"]["threads"]
-    return default
+# def get_threads(rule, default):
+#     cluster_config = snakemake.workflow.cluster_config
+#     if rule in cluster_config and "threads" in cluster_config[rule]:
+#         return cluster_config[rule]["threads"]
+#     if "default" in cluster_config and "threads" in cluster_config["default"]:
+#         return cluster_config["default"]["threads"]
+#     return default
 
 
-def get_mem(rule, default):
-    cluster_config = snakemake.workflow.cluster_config
-    if rule in cluster_config and "mem" in cluster_config[rule]:
-        return cluster_config[rule]["mem"]
-    if "default" in cluster_config and "mem" in cluster_config["default"]:
-        return cluster_config["default"]["mem"]
-    return default
+# def get_mem(rule, default):
+#     cluster_config = snakemake.workflow.cluster_config
+#     if rule in cluster_config and "mem" in cluster_config[rule]:
+#         return cluster_config[rule]["mem"]
+#     if "default" in cluster_config and "mem" in cluster_config["default"]:
+#         return cluster_config["default"]["mem"]
+#     return default
 
 
 def bwa_index_exists(genome):
