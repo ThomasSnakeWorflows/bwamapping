@@ -1,0 +1,21 @@
+executor: slurm
+jobs: 100
+
+default-resources:
+  slurm_partition: "workq"
+  slurm_account: "faraut"
+  mem: 16GB
+  time: 96:00:00
+
+set-threads:
+    bwamap: 12
+    qualimap: 6
+    splitfastq: 12
+
+set-resources:
+    bwamap:
+      mem-per-cpu: 8GB
+    qualimap:
+      mem-per-cpu: 8GB
+    splitfastq:
+      mem-per-cpu: 4GB
